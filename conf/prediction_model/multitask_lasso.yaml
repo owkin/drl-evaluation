@@ -1,0 +1,9 @@
+default:
+  _target_: omics_rpz.models.MultiTaskLasso
+  ensemble:
+
+TCGAPredictionTask:
+  Deconvolution:
+    _target_: omics_rpz.models.MultiTaskLasso
+    alpha: 0.01
+    max_iter: 1000

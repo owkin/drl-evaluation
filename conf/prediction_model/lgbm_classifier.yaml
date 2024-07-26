@@ -1,0 +1,4 @@
+default:
+  _target_: omics_rpz.models.LGBMClassifier
+  class_weight: balanced
+  ensemble:

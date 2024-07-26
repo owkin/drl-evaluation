@@ -1,0 +1,68 @@
+_target_: omics_rpz.tasks.ConsensusClusteringTask
+
+group_covariate:
+finetuning_rpz: False
+
+consensus_clustering:
+  n_clusters: 4
+  n_bootstrap: 100
+  prop_sample: 0.7
+  prop_features: 1
+  refit_rpz: True
+
+data:
+  dataset_labels:
+    _target_: omics_rpz.data.load_coad_labels
+    _partial_: True
+  dataset_clinical:
+    _target_: omics_rpz.data.load_coad_clinical
+    _partial_: True
+  dataset_mutations:
+    _target_: omics_rpz.data.load_coad_mutations
+    _partial_: True
+  dataset:
+    _target_: omics_rpz.data.load_multiple_cohorts_tcga
+    _partial_: True
+    cohorts:
+      - COAD
+    normalization_rnaseq: TPM
+    filter_tumor: True
+    unique_patients: True
+    ensemble:
+    #   normalization_rnaseq: ['TPM', 'NORM']
+  pretrain_dataset:
+    _target_: omics_rpz.data.load_multiple_cohorts_tcga
+    _partial_: True
+    cohorts: [ACC, BLCA, CESC, CHOL, COAD, ESCA, HNSC, KIRC, KIRP, LIHC, LUAD, LUSC, OV, PAAD, PRAD, READ, STAD, THCA, UCS, UCEC]
+    normalization_rnaseq: TPM
+    filter_tumor: True
+
+preprocessor:
+  _target_: omics_rpz.transforms.RNASeqPreprocessor
+  scaling_method: mean_std
+  log_scaling: True
+  healthy_tissue: COAD
+  gene_filtering: variance
+  select_protein_coding: False
+  max_genes: 5_000
+  gene_list:
+
+metric:
+  _target_: omics_rpz.metrics.ClusteringMetrics
+  clinical_variables: [TSS, age, Purety_CCF]
+  specific_variables: [
+    KRAS.mut, TP53.mut, BRAF.mut, APC.mut,
+    decoupler_msigdb_hallmark_HALLMARK_KRAS_SIGNALING_DN, decoupler_msigdb_hallmark_HALLMARK_KRAS_SIGNALING_UP,
+    decoupler_progeny_MAPK,
+    decoupler_progeny_WNT,
+    decoupler_TF_TP53,
+    decoupler_progeny_PI3K,
+    decoupler_progeny_TGFb,
+    decoupler_TF_MYC,
+    decoupler_TF_HNF4A,
+    decoupler_msigdb_reactome_pathways_REACTOME_SIGNALING_BY_TGFB_FAMILY_MEMBERS,
+    paper_MSI_status,
+    paper_hypermutated,
+    paper_histological_type,
+    paper_lymphatic_invasion_present,
+  ]

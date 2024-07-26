@@ -1,0 +1,78 @@
+default:
+  _target_: omics_rpz.transforms.AutoEncoderMultiHead
+  repr_dim: 128
+  hidden_n_layers: 2
+  hidden_n_units_first: 512
+  hidden_decrease_rate: 0.5
+  dropout: 0.5
+  bias: True
+  num_epochs: 100
+  batch_size: 32
+  learning_rate: 0.0005
+  early_stopping_use: True
+  max_num_epochs: 300
+  early_stopping_split: 0.2
+  early_stopping_patience: 50
+  early_stopping_delta: 0.001
+  device: cuda
+  multi_heads: [gender]
+  betas: [1, 0.1]
+  aux_losses: [BCE]
+  aux_hidden: [[32]]
+  aux_dropout: [0]
+  ce_quantile: 0.3
+  ensemble:
+
+GeneEssentiality:
+  repr_dim: 128
+  hidden_n_layers: 1
+  hidden_n_units_first: 256
+  dropout: 0
+  bias: True
+  num_epochs: 200
+  batch_size: 64
+  learning_rate: 0.0005
+  device: cuda
+  multi_heads: [OncotreePrimaryDisease]
+  betas: [1,0.5]
+  aux_losses: [CE]
+  aux_hidden: [[32]]
+  aux_dropout: [0.5]
+
+TCGAPredictionTask:
+  num_epochs: 100
+  OS:
+    repr_dim: 64
+    dropout: 0
+    num_epochs: 100
+    batch_size: 16
+    hidden_n_layers: 2
+    hidden_n_units_first: 256
+    hidden_decrease_rate: 0.5
+    learning_rate: 0.0005
+    betas: [1,0.1]
+    aux_dropout: [0.2]
+    aux_hidden: [[32]]
+    multi_heads: [OS]
+    aux_losses: [COX]
+  PFS:
+    repr_dim: 64
+    dropout: 0
+    num_epochs: 100
+    batch_size: 16
+    hidden_n_layers: 2
+    hidden_n_units_first: 256
+    hidden_decrease_rate: 0.5
+    learning_rate: 0.0005
+    betas: [1,0.1]
+    aux_dropout: [0.2]
+    aux_hidden: [[32]]
+    multi_heads: [OS]
+    aux_losses: [COX]
+
+ConsensusClusteringBRCA:
+  repr_dim: 64
+  betas: [1,1]
+  multi_heads: [label]
+  aux_losses: [CE]
+  ce_quantile: 0

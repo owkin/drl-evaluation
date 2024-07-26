@@ -1,0 +1,6 @@
+default:
+  _target_: omics_rpz.models.CoxModel
+  penalizer: 1.0e-5
+  l1_ratio: 0.0
+  step_size: 0.95
+  ensemble:

@@ -1,0 +1,13 @@
+default:
+  _target_: omics_rpz.transforms.ScVI
+  repr_dim: 64
+  hidden_n_layers: 1
+  hidden_n_units_first: 256
+  dropout: 0.01
+  num_epochs: 300
+  batch_size: 256
+  device: cuda
+  early_stopping_use: True
+  max_num_epochs: 300
+  gene_likelihood: "nb"
+  ensemble:

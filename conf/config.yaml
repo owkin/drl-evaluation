@@ -1,0 +1,52 @@
+defaults:
+  - task: survival_prediction_tcga_task
+  - representation_model: pca
+  - prediction_model: cox_model
+  # Overrides. See config choices for samplers: https://github.com/facebookresearch/hydra/blob/main/plugins/hydra_optuna_sweeper/hydra_plugins/hydra_optuna_sweeper/config.py
+  - override /hydra/sweeper/sampler: tpe # choices are ["grid", "random", "cmaes", "tpe", "nsgaii", "motpe"] and must match the sampler _target_ as defined below.
+  - override hydra/sweeper: optuna
+  - _self_
+
+logging_path: ./outputs/logs/
+mlflow_path: ./outputs/mlflow/
+track: False
+results_bucket: omics-rpz-results
+save_predictions: True # will be saved within the logging path with the results and the param.pkl
+
+# Computation resources available in total
+# Used by parallel_grid_search and parallel_holdout
+num_cpus_for_ray: 80
+num_gpus_for_ray: 4
+cpu_per_repeat: 8
+gpu_per_repeat: 0.4
+use_ray: True
+
+# number of repetitions to be used by repeated_holdout.py
+num_repeated_holdout: 10
+random_seed_start_at: 0
+
+
+# default random seed for train/test split (will be modified in each repetition by repeated_holdout.py)
+test_split_random_seed: 0
+test_split_ratio: 0.2
+
+# When train_test_no_cv is false, run a cross-validation on the train set (eg: 80%).
+# When train_test_no_cv is True, there is no cross-validation:
+# train on the train set (eg: 80%) and evaluate on the test set (eg: 20%).
+train_test_no_cv: False
+
+# To filter all trials of a given study in MLflow: params.study_name="study_name"
+study_name: study_name
+
+hydra:
+  sweeper:
+    sampler:
+      # https://optuna.readthedocs.io/en/stable/tutorial/10_key_features/003_efficient_optimization_algorithms.html
+      _target_: optuna.samplers.TPESampler
+    direction: maximize
+    storage: null
+    n_trials: 50
+    # below specify parameters to be tested in the hyperparameter search
+    # example add below params: +representation_model.repr_dim: range(10,100)
+    params:
+      # +representation_model.repr_dim: range(10,100)

@@ -1,0 +1,29 @@
+default:
+  _target_: omics_rpz.transforms.Gnn
+  hidden_channels: [8,16,16]
+  out_dim: 1
+  sigmoid: True
+  device: 'cuda'
+  learning_rate: 0.0001
+  message_passing: 'SAGE'
+  pooling: 'max'
+  num_epochs: 50
+  repr_dim: 128
+  dropout: 0.3
+  batch_size: 32
+  aggregation_SAGEConv: 'mean'
+  unsupervised: True
+  early_stopping_use: False
+  ensemble:
+  graph_loading:
+    string_threshold: 0.99
+    cluster_resolution: 500
+    clustering: 'louvain'
+    permute_gene_names: False
+    clustering_seed: 42
+    pathway_source: 'KEGG'
+  decoder_params:
+    hidden_n_layers: 2
+    hidden_n_units_first: 128
+    hidden_decrease_rate: 0.5
+    dropout: 0.2

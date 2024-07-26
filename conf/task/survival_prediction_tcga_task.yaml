@@ -1,0 +1,54 @@
+_target_: omics_rpz.tasks.TCGAPredictionTask
+
+label: OS
+
+finetuning: False
+pretraining: False
+pretrained_ae_path:
+finetuning_rpz: False
+noise_training: False
+noise_pretraining: False
+noise_level_training: 0.0
+noise_level_pretraining: 0.0
+n_augment_training: 0
+n_augment_pretraining: 0
+
+bootstrapping_test: 1000
+n_random_seed_cv_start_at: 0
+n_repeats_cv: 1
+n_splits: 5
+
+normalizations_augment:
+    # - NORM
+
+data:
+  pretrain_dataset:
+    _target_: omics_rpz.data.load_multiple_cohorts_tcga
+    _partial_: True
+    cohorts: ALL_TCGA_COHORTS
+    normalization_rnaseq: TPM
+    filter_tumor: True
+  dataset:
+    _target_: omics_rpz.data.load_multiple_cohorts_tcga
+    _partial_: True
+    cohorts:
+      - BRCA
+    normalization_rnaseq: TPM
+    filter_tumor: True
+    ensemble:
+    #   normalization_rnaseq: ['TPM', 'NORM']
+  group_covariate:
+
+preprocessor:
+  _target_: omics_rpz.transforms.RNASeqPreprocessor
+  scaling_method: mean_std
+  gene_filtering: variance
+  select_protein_coding: False
+  max_genes: 5_000
+  log_scaling: True
+  gene_list :
+  healthy_tissue: BRCA
+
+metric:
+  _target_: omics_rpz.metrics.compute_cindex
+  _partial_: True

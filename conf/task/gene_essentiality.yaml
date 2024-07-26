@@ -1,0 +1,55 @@
+_target_: omics_rpz.tasks.GeneEssentiality
+
+fgps_rpz_model:
+    _target_: omics_rpz.transforms.PCA
+    # This need to be reduced to 59 for 59 DepOI
+    repr_dim: 500
+
+preprocessor:
+  _target_: omics_rpz.transforms.RNASeqPreprocessor
+  scaling_method: mean_std
+  gene_filtering: variance
+  select_protein_coding: False
+  max_genes: 5_000
+  gene_list:
+  log_scaling: True
+
+n_repeats_cv: 1
+n_random_seed_cv_start_at: 0
+n_splits: 5
+bootstrapping: 1000
+
+pretraining: False
+pretrained_ae_path:
+finetuning_rpz: False
+noise_training: False
+noise_pretraining: False
+noise_level_training: 0.0
+noise_level_pretraining: 0.0
+n_augment_training: 0
+n_augment_pretraining: 0
+finetuning: False
+normalizations_augment:
+    # - RAW
+
+data:
+  pretrain_dataset:
+    _target_: omics_rpz.data.load_multiple_cohorts_tcga
+    _partial_: True
+    cohorts: ALL_TCGA_COHORTS
+    filter_tumor: True
+  dataset:
+    _target_: omics_rpz.data.load_data_for_essentiality_pred
+    _partial_: True
+    normalization_rnaseq: "TPM"
+    nbr_of_depoi: 1227
+    ensemble:
+      # normalization_rnaseq: ['TPM', 'RAW']
+
+metric:
+  _target_: omics_rpz.metrics.spearmanr # Other option is omics_rpz.metrics.pearsonr.
+  _partial_: True
+
+
+# Use only when trying to infer GTEx and TCGA.
+use_for_gtex_tcga_inference: False

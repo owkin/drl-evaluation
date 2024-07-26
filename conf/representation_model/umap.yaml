@@ -1,0 +1,4 @@
+default:
+  _target_: omics_rpz.transforms.UMAP
+  repr_dim: 256
+  ensemble:

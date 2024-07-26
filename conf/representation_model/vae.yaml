@@ -1,0 +1,75 @@
+default:
+  _target_: omics_rpz.transforms.VariationalAutoencoder
+  repr_dim: 128
+  hidden_n_layers: 2
+  hidden_n_units_first: 512
+  hidden_decrease_rate: 0.5
+  bias: True
+  batch_size: 32
+  learning_rate: 0.0005
+  device: cuda
+  beta_max: 1.0
+  beta_num_cycles: 5
+  beta_ramping_iters: 0.5
+  epochs_ref_annealing_cycle: 200
+  weight_decay: 1e-5
+  monte_carlo: True
+  dropout: 0.0
+  draw_plots: False
+  use_mean: True
+  ensemble:
+  num_epochs: 201
+  early_stopping_use: True
+  max_num_epochs: 501
+  early_stopping_split: 0.2
+  early_stopping_patience: 50
+  early_stopping_delta: 0.001
+
+TCGAPredictionTask:
+  OS:
+    repr_dim: 256
+    batch_size: 32
+    hidden_n_layers: 1
+    hidden_n_units_first: 1024
+    learning_rate: 0.001
+    beta_max: 0.1
+    beta_num_cycles: 5
+    beta_ramping_iters: 0.5
+    weight_decay: 1e-5
+    monte_carlo: False
+    dropout: 0.0
+    device: cuda
+    draw_plots: False
+    use_mean: True
+  PFS:
+    repr_dim: 256
+    batch_size: 32
+    hidden_n_layers: 1
+    hidden_n_units_first: 1024
+    learning_rate: 0.001
+    beta_max: 0.1
+    beta_num_cycles: 5
+    beta_ramping_iters: 0.5
+    weight_decay: 1e-5
+    monte_carlo: False
+    dropout: 0.0
+    device: cuda
+    draw_plots: False
+    use_mean: True
+
+GeneEssentiality:
+  repr_dim: 128
+  hidden_n_layers: 1
+  hidden_n_units_first: 1024
+  bias: True
+  batch_size: 32
+  learning_rate: 0.001
+  device: cuda
+  beta_max: 1.0
+  beta_num_cycles: 5
+  beta_ramping_iters: 0.5
+  weight_decay: 1e-5
+  monte_carlo: True
+  dropout: 0.0
+  draw_plots: False
+  use_mean: True

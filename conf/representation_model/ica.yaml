@@ -1,0 +1,4 @@
+default:
+  _target_: omics_rpz.transforms.ICA
+  repr_dim: 256
+  ensemble:

@@ -1,0 +1,5 @@
+default:
+  _target_: omics_rpz.transforms.DecouplerRPZ
+  net: progeny
+  net_arg: 100
+  ensemble:

@@ -1,0 +1,17 @@
+default:
+  _target_: omics_rpz.transforms.PCA
+  repr_dim: 32
+  ensemble:
+
+TCGAPredictionTask:
+  OS:
+    repr_dim: 256
+  PFS:
+    repr_dim: 256
+
+GeneEssentiality:
+  _target_: omics_rpz.transforms.PCA
+  repr_dim: 300
+
+ConsensusClusteringBRCA:
+  repr_dim: 64

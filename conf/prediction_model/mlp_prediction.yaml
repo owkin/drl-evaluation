@@ -1,0 +1,89 @@
+default:
+  _target_: omics_rpz.models.mlp.MLPPrediction
+  device: cuda
+  learning_rate: 0.0001
+  dropout: 0.1
+  batch_size : 30
+  num_epochs: 10
+  loss_fn:
+    _target_: omics_rpz.losses.MSELoss
+  mlp_hidden: [256,128]
+  ensemble:
+  early_stopping_use: True
+  max_num_epochs: 300
+  early_stopping_split: 0.2
+  early_stopping_patience: 100
+  early_stopping_delta: 0.001
+
+  activation:
+    _target_: omics_rpz.losses.Sigmoid
+  final_activation:
+
+TCGAPredictionTask:
+  OS:
+    _target_: omics_rpz.models.mlp.MLPPrediction
+    device: cuda
+    learning_rate: 0.0001
+    dropout: 0
+    batch_size : 256
+    num_epochs: 50
+    loss_fn:
+      _target_: omics_rpz.losses.CoxLoss
+    activation:
+      _target_: omics_rpz.losses.Sigmoid
+    final_activation:
+      _target_: omics_rpz.losses.Sigmoid
+    metric:
+      _partial_: True
+      _target_: omics_rpz.metrics.compute_cindex
+
+  PFS:
+    _target_: omics_rpz.models.mlp.MLPPrediction
+    device: cuda
+    learning_rate: 0.0001
+    dropout: 0
+    batch_size : 256
+    num_epochs: 50
+    loss_fn:
+      _target_: omics_rpz.losses.CoxLoss
+    activation:
+      _target_: omics_rpz.losses.Sigmoid
+    final_activation:
+      _target_: omics_rpz.losses.Sigmoid
+    metric:
+      _partial_: True
+      _target_: omics_rpz.metrics.compute_cindex
+
+  Deconvolution:
+    _target_: omics_rpz.models.mlp.MLPPrediction
+    device: cuda
+    learning_rate: 0.001
+    batch_size : 64
+    n_epochs: 300
+    loss_fn:
+      _target_: omics_rpz.losses.MAPELoss
+    activation:
+      _target_: omics_rpz.losses.Sigmoid
+    final_activation:
+      _target_: omics_rpz.losses.Softmax
+      dim: 1
+    metric:
+      _partial_: True
+      _target_: omics_rpz.metrics.compute_r2_score
+      multioutput: variance_weighted
+
+GeneEssentiality:
+    _target_: omics_rpz.models.mlp.MLPPrediction
+    device: cuda
+    learning_rate: 0.001
+    dropout: 0.1
+    batch_size : 80
+    num_epochs: 50
+    loss_fn:
+      _target_: omics_rpz.losses.MSELoss
+    mlp_hidden: [256,128,64]
+    activation:
+      _target_: omics_rpz.losses.Sigmoid
+    metric:
+      _partial_: True
+      _target_: omics_rpz.metrics.spearmanr
