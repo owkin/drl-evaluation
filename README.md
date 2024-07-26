@@ -17,7 +17,7 @@ pre-commit install
 
 ## Download data 
 
-The data used in our study is available for download on this bucket. 
+The data used in our study is available for download on this bucket (WIP - will be available shortly). 
 Once downloaded, make sure to update the `PREFIX` variable in `omics_rpz/constants.py` to point to the location of downloaded folder `benchmark_data`.
 
 ## Launch an experiment
