@@ -17,7 +17,8 @@ pre-commit install
 
 ## Download data 
 
-The data used in our study is available for download on this bucket (WIP - will be available shortly). 
+The data used in our study is available for download [through this link](https://owkin-omics-rpz.s3.eu-west-1.amazonaws.com/benchmark_data.zip).
+
 Once downloaded, make sure to update the `PREFIX` variable in `omics_rpz/constants.py` to point to the location of downloaded folder `benchmark_data`.
 
 ## Launch an experiment
